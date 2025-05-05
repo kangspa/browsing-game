@@ -13,7 +13,7 @@ export default class MainScene extends Phaser.Scene {
   preload() {
     this.load.image('background', 'sky.png');
     this.load.spritesheet('ground', 'blocks.png', { frameWidth: 16, frameHeight: 16 });
-    this.load.spritesheet('mario', 'merged_output.png', { frameWidth: 16, frameHeight: 16 });
+    this.load.spritesheet('mario', 'merged_output.png', { frameWidth: 17, frameHeight: 16 });
   }
 
   create() {
@@ -57,7 +57,7 @@ export default class MainScene extends Phaser.Scene {
     }
 
     const body = this.player.body as Phaser.Physics.Arcade.Body;
-    if (this.cursors.up?.isDown && body.touching.down) {
+    if (this.cursors.up?.isDown && body.onFloor()) {
         this.player.setVelocityY(-300);
     }
   }
