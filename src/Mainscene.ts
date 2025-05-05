@@ -11,9 +11,9 @@ export default class MainScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('background', 'public/sky.png');
-    this.load.spritesheet('ground', 'public/blocks.png', { frameWidth: 16, frameHeight: 16 });
-    this.load.spritesheet('mario', 'public/merged_output.png', { frameWidth: 16, frameHeight: 16 });
+    this.load.image('background', 'sky.png');
+    this.load.spritesheet('ground', 'blocks.png', { frameWidth: 16, frameHeight: 16 });
+    this.load.spritesheet('mario', 'merged_output.png', { frameWidth: 16, frameHeight: 16 });
   }
 
   create() {
