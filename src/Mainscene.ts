@@ -1,15 +1,19 @@
-// src/scenes/MainScene.ts
+// src/MainScene.ts
 import Phaser from 'phaser';
+import fetchAndParseHTML from './fetchUrls';
 
 export default class MainScene extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
-  private platforms!: Phaser.Physics.Arcade.StaticGroup;
-  private pipes!: Phaser.Physics.Arcade.StaticGroup;
-  private onPipeEnter?: (index: number) => void;
   private lastDirection: 'left' | 'right' = 'right';
 
-  constructor(onPipeEnter?: (index: number) => void) {
+  private platforms!: Phaser.Physics.Arcade.StaticGroup;
+  private pipes!: Phaser.Physics.Arcade.StaticGroup;
+  private onPipeEnter?: (url: string) => void;
+
+  private urlList!: string[]; // URL 목록을 저장할 프로퍼티
+
+  constructor(onPipeEnter?: (url: string) => void) {
     super('MainScene');
     this.onPipeEnter = onPipeEnter;
   }
@@ -22,8 +26,15 @@ export default class MainScene extends Phaser.Scene {
     this.load.spritesheet('pipes', '/usedPipe.png', { frameWidth: 32, frameHeight: 32 });
     this.load.spritesheet('mario', '/merged_output.png', { frameWidth: 17, frameHeight: 16 });
   }
+  
+  private async loadUrls() {
+    const targetUrl = 'https://kangspa.github.io/'; // 대상 URL
+    this.urlList = await fetchAndParseHTML(targetUrl);
+    console.log('Fetched URLs in scene:', this.urlList);
+  }
 
   create() {
+    this.loadUrls();
     // 배경 이미지와 구름, 풀을 추가
     this.add.image(400, 125, 'sky');
     let randomValue;
@@ -65,6 +76,20 @@ export default class MainScene extends Phaser.Scene {
 
     this.physics.add.collider(this.player, this.platforms);
 
+    // prev 블럭 생성
+    const prevBlock = this.physics.add.staticSprite(160, 150, 'blocks', 4);
+    this.physics.add.collider(this.player, prevBlock, () => {
+      const iframe = document.querySelector('iframe') as HTMLIFrameElement;
+      iframe?.contentWindow?.postMessage('click-prev', 'https://kangspa.github.io');
+    });
+
+    // next 블럭 생성
+    const nextBlock = this.physics.add.staticSprite(256, 150, 'blocks', 5);
+    this.physics.add.collider(this.player, nextBlock, () => {
+      const iframe = document.querySelector('iframe') as HTMLIFrameElement;
+      iframe?.contentWindow?.postMessage('click-next', 'https://kangspa.github.io');
+    });
+
     // 파이프 추가
     const pipeH = this.physics.add.sprite(66, 202, 'pipes', 5);
     this.physics.add.collider(pipeH, this.platforms);
@@ -75,7 +100,7 @@ export default class MainScene extends Phaser.Scene {
     }
     this.pipes = this.physics.add.staticGroup();
 
-    const pipePositions = [300, 400, 500, 600, 700];
+    const pipePositions = [350, 446, 542, 638, 734];
     pipePositions.forEach((x, i) => {
       const pipe = this.pipes.create(x, 202, 'pipes', i) as PipeWithIndex;
       pipe.setImmovable(true);
@@ -88,7 +113,7 @@ export default class MainScene extends Phaser.Scene {
     this.physics.add.overlap(this.player, this.pipes, (_player, pipe) => {
       const pipeWithIndex = pipe as PipeWithIndex;
       const index = pipeWithIndex.pipeIndex;
-      this.onPipeEnter?.(index);
+      this.onPipeEnter?.(this.urlList[index]);
     });
 
     this.cursors = (this.input.keyboard as Phaser.Input.Keyboard.KeyboardPlugin).createCursorKeys();

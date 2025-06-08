@@ -4,7 +4,7 @@ import Phaser from 'phaser';
 import MainScene from './Mainscene';
 
 type GameProps = {
-  onPipeEnter?: (index: number) => void;
+  onPipeEnter?: (url: string) => void;
 };
 
 const Game: React.FC<GameProps> = ({ onPipeEnter }) => {
