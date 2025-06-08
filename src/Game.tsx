@@ -3,16 +3,22 @@ import React, { useEffect, useRef } from 'react';
 import Phaser from 'phaser';
 import MainScene from './Mainscene';
 
-const Game: React.FC = () => {
+type GameProps = {
+  onPipeEnter?: (index: number) => void;
+};
+
+const Game: React.FC<GameProps> = ({ onPipeEnter }) => {
   const gameRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!gameRef.current) return;
 
+    const scene = new MainScene(onPipeEnter);
+
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
       width: 800,
-      height: 400,
+      height: 250,
       physics: {
         default: 'arcade',
         arcade: { gravity: {
@@ -20,7 +26,7 @@ const Game: React.FC = () => {
           x: 0
         }, debug: false },
       },
-      scene: MainScene,
+      scene,
       parent: gameRef.current,
     };
 
@@ -29,7 +35,7 @@ const Game: React.FC = () => {
     return () => {
       game.destroy(true); // cleanup on component unmount
     };
-  }, []);
+  }, [onPipeEnter]);
 
   return <div ref={gameRef} />;
 };
