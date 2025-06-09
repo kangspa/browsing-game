@@ -91,10 +91,21 @@ export default class MainScene extends Phaser.Scene {
 
     // prev 블럭 생성
     const prevBlock = this.physics.add.staticSprite(192, 150, 'blocks', 4);
-    this.physics.add.collider(this.player, prevBlock, (obj1, ) => {
+    this.physics.add.collider(this.player, prevBlock, (obj1, obj2) => {
       const player = obj1 as Phaser.Physics.Arcade.Sprite;
+      const block = obj2 as Phaser.Physics.Arcade.Sprite;
+
       const body = player.body as Phaser.Physics.Arcade.Body;
       if (body.touching.up && !this.isEnteringPipe) {
+        // 블록 튕기기 애니메이션
+        this.tweens.add({
+          targets: block,
+          y: block.y - 8,
+          duration: 100,
+          yoyo: true,
+          ease: 'Power1',
+        });
+
         const iframe = document.querySelector('iframe') as HTMLIFrameElement;
         iframe?.contentWindow?.postMessage('click-prev', 'https://kangspa.github.io');
         if (this.currentPage !== 0) this.currentPage--;
@@ -103,10 +114,21 @@ export default class MainScene extends Phaser.Scene {
 
     // next 블럭 생성
     const nextBlock = this.physics.add.staticSprite(288, 150, 'blocks', 5);
-    this.physics.add.collider(this.player, nextBlock, (obj1, ) => {
+    this.physics.add.collider(this.player, nextBlock, (obj1, obj2) => {
       const player = obj1 as Phaser.Physics.Arcade.Sprite;
+      const block = obj2 as Phaser.Physics.Arcade.Sprite;
+
       const body = player.body as Phaser.Physics.Arcade.Body;
       if (body.touching.up && !this.isEnteringPipe) {
+        // 블록 튕기기 애니메이션
+        this.tweens.add({
+          targets: block,
+          y: block.y - 8,
+          duration: 100,
+          yoyo: true,
+          ease: 'Power1',
+        });
+
         const iframe = document.querySelector('iframe') as HTMLIFrameElement;
         iframe?.contentWindow?.postMessage('click-next', 'https://kangspa.github.io');
         if (this.pageCount !== this.currentPage) this.currentPage++;
@@ -115,20 +137,42 @@ export default class MainScene extends Phaser.Scene {
 
     // 스크롤 업 다운 블럭 생성
     const upBlock = this.physics.add.staticSprite(240, 90, 'blocks', 2);
-    this.physics.add.collider(this.player, upBlock, (obj1, ) => {
+    this.physics.add.collider(this.player, upBlock, (obj1, obj2) => {
       const player = obj1 as Phaser.Physics.Arcade.Sprite;
+      const block = obj2 as Phaser.Physics.Arcade.Sprite;
+
       const body = player.body as Phaser.Physics.Arcade.Body;
       if (body.touching.up) {
+        // 블록 튕기기 애니메이션
+        this.tweens.add({
+          targets: block,
+          y: block.y - 8,
+          duration: 100,
+          yoyo: true,
+          ease: 'Power1',
+        });
+
         const iframe = document.querySelector('iframe') as HTMLIFrameElement;
         iframe?.contentWindow?.postMessage('scroll-up', 'https://kangspa.github.io');
       };
     });
 
     const downBlock = this.physics.add.staticSprite(240, 150, 'blocks', 3);
-    this.physics.add.collider(this.player, downBlock, (obj1, ) => {
+    this.physics.add.collider(this.player, downBlock, (obj1, obj2) => {
       const player = obj1 as Phaser.Physics.Arcade.Sprite;
+      const block = obj2 as Phaser.Physics.Arcade.Sprite;
+
       const body = player.body as Phaser.Physics.Arcade.Body;
       if (body.touching.up) {
+        // 블록 튕기기 애니메이션
+        this.tweens.add({
+          targets: block,
+          y: block.y - 8,
+          duration: 100,
+          yoyo: true,
+          ease: 'Power1',
+        });
+
         const iframe = document.querySelector('iframe') as HTMLIFrameElement;
         iframe?.contentWindow?.postMessage('scroll-down', 'https://kangspa.github.io');
       };
