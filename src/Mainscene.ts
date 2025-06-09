@@ -67,7 +67,7 @@ export default class MainScene extends Phaser.Scene {
     }
 
     // 플레이어 추가
-    this.player = this.physics.add.sprite(100, 170, 'mario');
+    this.player = this.physics.add.sprite(130, 150, 'mario');
     this.player.setBounce(0.1);
     this.player.setCollideWorldBounds(true);
     this.player.setFrame(6);
@@ -198,6 +198,28 @@ export default class MainScene extends Phaser.Scene {
           const index = p.pipeIndex;
           const url = this.urlList[index + this.currentPage * 5];
           this.onPipeEnter?.(url);
+
+          // 1단계: 아래로 사라지는 애니메이션
+          this.tweens.add({
+            targets: this.player,
+            y: this.player.y + 20, // 아래로 이동
+            alpha: 0,
+            duration: 400,
+            ease: 'Power2',
+            onComplete: () => {
+              // 위치를 파이프 입구로 순간이동
+              this.player.setPosition(130, 202);
+              
+              // 2단계: 위로 올라오는 애니메이션
+              this.tweens.add({
+                targets: this.player,
+                y: 180,
+                alpha: 1,
+                duration: 400,
+                ease: 'Power2'
+              });
+            }
+          });
           break; // 다른 파이프 검사하지 않음
         }
       }
@@ -211,6 +233,28 @@ export default class MainScene extends Phaser.Scene {
         this.isEnteringPipe = false;
         const iframe = document.querySelector('iframe') as HTMLIFrameElement;
         iframe?.contentWindow?.postMessage('go-back', 'https://kangspa.github.io');
+
+        // 1단계: 아래로 사라지는 애니메이션
+        this.tweens.add({
+          targets: this.player,
+          y: this.player.y + 20, // 아래로 이동
+          alpha: 0,
+          duration: 400,
+          ease: 'Power2',
+          onComplete: () => {
+            // 위치를 파이프 입구로 순간이동
+            this.player.setPosition(130, 202);
+            
+            // 2단계: 위로 올라오는 애니메이션
+            this.tweens.add({
+              targets: this.player,
+              y: 180,
+              alpha: 1,
+              duration: 400,
+              ease: 'Power2'
+            });
+          }
+        });
       }
       // pipeR에 진입 이벤트 발생하는지 확인
       const pipeRBounds = this.pipeR.getBounds();
@@ -218,7 +262,16 @@ export default class MainScene extends Phaser.Scene {
         playerBounds.bottom === pipeRBounds.top &&
         playerBounds.right > pipeRBounds.left &&
         playerBounds.left < pipeRBounds.right;
-      if (isOnPipeR) window.location.reload();
+      if (isOnPipeR) {
+        window.location.reload();
+        this.tweens.add({
+          targets: this.player,
+          y: this.player.y + 20, // 아래로 이동
+          alpha: 0,
+          duration: 400,
+          ease: 'Power2'
+        });
+      }
     };
   }
 }
