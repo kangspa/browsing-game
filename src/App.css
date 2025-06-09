@@ -40,3 +40,86 @@
 .read-the-docs {
   color: #888;
 }
+
+#app {
+  display: flex;
+  flex-direction: column; /* 기본: 수직 정렬 */
+  align-items: center;
+  gap: 2rem; /* 요소 간 간격 */
+}
+#descript {
+  width: 600px;
+}
+
+/* 화면 너비가 1300px 이상일 때는 수평 정렬 */
+@media (min-width: 1300px) {
+  #app {
+    flex-direction: row;
+    align-items: flex-start; /* 위쪽 정렬 */
+    justify-content: center;
+  }
+
+  #main,
+  #descript {
+    flex: 0 0 auto; /* 너비 고정 */
+  }
+  #descript {
+    width: 400px;
+  }
+}
+
+.iframe-wrapper {
+  position: relative;
+  width: 800px;
+  height: 500px;
+}
+
+.iframe-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background-color: transparent; /* 완전 투명 */
+  pointer-events: all; /* 마우스 이벤트를 가로채기 */
+}
+
+.frame-table {
+  display: grid;
+  grid-template-columns: 32px 1fr; /* 1열은 32px 고정, 2열은 나머지 공간 */
+  row-gap: 8px;      /* 행 간격 */
+  column-gap: 16px;  /* 열 간격 */
+  align-items: center; /* 수직 중앙 정렬 */
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.frame-row {
+  display: contents; /* 그리드 셀 내에서 자식 요소들이 직접 그리드 셀 역할 하게 함 */
+}
+
+.blockFrame, .pipeFrame {
+  justify-self: center; /* 수평 중앙 정렬 */
+  width: 32px;
+  height: 32px;
+  background-repeat: no-repeat;
+}
+
+.blockFrame {
+  background-image: url('/usedBlock.png');
+  width: 16px;
+  height: 16px;
+}
+
+.pipeFrame {
+  background-image: url('/usedPipe.png');
+  width: 32px;
+  height: 32px;
+}
+
+.desc {
+  font-size: 14px;
+  text-align: left;
+  padding-left: 8px;
+}
