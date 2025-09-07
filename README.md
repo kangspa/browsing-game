@@ -1,5 +1,6 @@
 # Browsing-Game
 Phaser를 사용해서 게임 조작방식으로 블로그를 탐색해보자.
+- 결과물 : <https://browsing-game.web.app/>
 
 ## 사용 기술
 
@@ -75,8 +76,8 @@ window.addEventListener('message', (e) => {
 
 이 때, `Mainscene.ts`에서도 `currentPage`에 따라 `urlList`의 index 값을 계산하기도하고, 명령 전송여부도 정해야하여 별도로 `currentPage`를 관리해줘야한다.
 
----
-
+<details>
+<summary>Firebase 프로젝트 생성 시 기본 Readme 내용</summary>
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -131,3 +132,4 @@ export default tseslint.config({
   },
 })
 ```
+</details>
